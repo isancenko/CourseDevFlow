@@ -1,3 +1,5 @@
+import QuestionCard from "@/components/cards/QuestionCard";
+import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
@@ -13,7 +15,12 @@ const questions = [
       { _id: "1", name: "React" },
       { _id: "2", name: "JavaScript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://t4.ftcdn.net/jpg/02/79/66/93/360_F_279669366_Lk12QalYQKMczLEa4ySjhaLtx1M2u7e6.jpg",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -28,7 +35,12 @@ const questions = [
       { _id: "1", name: "React" },
       { _id: "2", name: "JavaScript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://t4.ftcdn.net/jpg/02/79/66/93/360_F_279669366_Lk12QalYQKMczLEa4ySjhaLtx1M2u7e6.jpg",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -41,11 +53,17 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
-  const { query = "" } = await searchParams;
+  const { query = "", filter = "" } = await searchParams;
 
-  const filteredQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(query?.toLowerCase())
-  );
+  const filteredQuestions = questions.filter((question) => {
+    const matchesQuery = question.title
+      .toLowerCase()
+      .includes(query.toLocaleLowerCase());
+    const matchesFilter = filter
+      ? question.tags[0].name.toLowerCase() === filter.toLowerCase()
+      : true;
+    return matchesQuery && matchesFilter;
+  });
 
   return (
     <>
@@ -66,10 +84,10 @@ const Home = async ({ searchParams }: SearchParams) => {
           route="/"
         />
       </section>
-      HomeFilter
+      <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>
