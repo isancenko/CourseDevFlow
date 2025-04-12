@@ -2,9 +2,8 @@ import { NextResponse } from "next/server";
 
 import handleError from "@/lib/handlers/error";
 import dbConnect from "@/lib/mongoose";
-import { AccountSchema, UserSchema } from "@/lib/validations";
+import { AccountSchema } from "@/lib/validations";
 import { NotFoundError } from "@/lib/http-error";
-import User from "@/database/user.nodel";
 import Account from "@/database/account.model";
 
 // GET /api/users/[id]
